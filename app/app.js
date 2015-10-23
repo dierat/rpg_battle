@@ -8,10 +8,15 @@ if (Meteor.isClient) {
   Accounts.ui.config({
     passwordSignupFields: "USERNAME_ONLY"
   });
-  
+
   // Renders the login panel as uncollapsed on login_page template.
   Template.loginScreen.rendered = function() {
     Accounts._loginButtonsSession.set('dropdownVisible', true);
+  };
+
+  Template.gameScreen.rendered = function() {
+    // play battle music
+    document.getElementsByTagName("audio")[0].play();
   };
 
   Template.main.helpers({
@@ -22,8 +27,6 @@ if (Meteor.isClient) {
 
   Template.main.events({
     'click .newGame': function(){
-      // play battle music
-      document.getElementsByTagName("audio")[0].play();
       // grab monster objects for new game document
       var monsters = Monsters.find().map(function(m){
         return {
