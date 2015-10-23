@@ -1,6 +1,6 @@
 // these methods are globally defined so they can be used across files
 
-// index is the index of this audio file as listed in hackquest.html
+// index is the index of this audio file as listed in app.html
 playSound = function(index, playFromBeginning){
   var audioElem = document.getElementsByTagName("audio")[index];
   if (playFromBeginning){
@@ -23,7 +23,7 @@ play = function(){
   var gameId = findGame()._id;
   var activeEntity = findGame().characters[0];
   setTimeout(function(){
-    Games.update({_id: gameId}, {$set: 
+    Games.update({_id: gameId}, {$set:
       {
         activeEntity: activeEntity,
         messages: ['It is now ' + activeEntity.name + "'s turn!"],
