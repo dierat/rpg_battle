@@ -1,8 +1,47 @@
-if (Meteor.isClient){  
+// determines if an action was successful, and if so,
+// how much of an effect it had
+
+// chance is a percentage in the form of a float (example 0.15 for a 15% chance)
+// min and max are numbers that define the possible range of the action's effect
+// min and max are optional; if not passed in, the method will return true or false
+
+// returns false if it failed or an integer for the effect the action had
+actionEffect = function(chance, min, max){
+  var successful = Math.random() <= chance;
+  if (successful && min !== undefined && max !== undefined){
+    return Math.floor(Math.random() * max) + min;
+  } else {
+    return successful;
+  }
+};
+
+
+
+hurtMonster = function(){};
+
+
+
+if (Meteor.isClient){
   Template.gameScreen.events({
 
     'click .code': function(){
       var gameId = findGame()._id;
+
+
+      /*
+      var actionEffect = actionEffect(0.15, 5, 40);
+      if (actionEffect === false){
+        // action failed
+        // show action failed message
+        // move on to next character or monster
+
+      } else {
+        playSound(1);
+        var monsterStam = findGame().monster.stam - actionEffect;
+      }
+      */
+      
+
       var hit = Math.random() > 0.15;
 
       // if the action was successful
@@ -23,8 +62,8 @@ if (Meteor.isClient){
           };
           Games.update(
             {_id: gameId},
-            {$set: 
-              {monster: newMonster, 
+            {$set:
+              {monster: newMonster,
               messages: [ findGame().activeEntity.name + " wrote " + code + " lines of code!" ]}
             }
           );
@@ -33,7 +72,7 @@ if (Meteor.isClient){
         } else {
           Games.update(
             {_id: gameId},
-            {$addToSet: 
+            {$addToSet:
               {messages: findGame().monster.name + " has been defeated!"}
             }
           );
@@ -65,7 +104,7 @@ if (Meteor.isClient){
                 messages: ["You won! Please hit the 'New Game' button to play again!"],
                 playerTurn: false
               }});
-            }, 1500);    
+            }, 1500);
           }
         }
 
@@ -74,7 +113,7 @@ if (Meteor.isClient){
       } else {
         Games.update(
           {_id: gameId},
-          {$set: 
+          {$set:
             {messages: [ findGame().activeEntity.name + " didn't write a single line!" ]}
           }
         );
@@ -124,8 +163,8 @@ if (Meteor.isClient){
           };
           Games.update(
             {_id: gameId},
-            {$set: 
-              {monster: newMonster, 
+            {$set:
+              {monster: newMonster,
               messages: [ findGame().activeEntity.name + " copy/pasted " + code + " lines of code!" ]}
             }
           );
@@ -134,7 +173,7 @@ if (Meteor.isClient){
         } else {
           Games.update(
             {_id: gameId},
-            {$addToSet: 
+            {$addToSet:
               {messages: findGame().monster.name + " has been defeated!"}
             }
           );
@@ -166,7 +205,7 @@ if (Meteor.isClient){
                 messages: ["You won! Please hit the 'New Game' button to play again!"],
                 playerTurn: false
               }});
-            }, 1500);    
+            }, 1500);
           }
         }
 
@@ -175,7 +214,7 @@ if (Meteor.isClient){
       } else {
         Games.update(
           {_id: gameId},
-          {$set: 
+          {$set:
             {messages: [ findGame().activeEntity.name + " couldn't find any useful results!" ]}
           }
         );
@@ -208,7 +247,7 @@ if (Meteor.isClient){
       var gameId = findGame()._id;
       Games.update(
         {_id: findGame()._id},
-        {$set: 
+        {$set:
           // update messages with last activity
           {messages: [ "giphy fail! Everyone laughed at " + findGame().activeEntity.name + "!" ]}
         }
